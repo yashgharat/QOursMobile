@@ -18,7 +18,9 @@ class AppScaffold extends StatelessWidget {
       //maxHeight: 50.0,
       //maxWidth: 50.0,
     );
-    print("You selected camera image : " + image.path);
+
+    String path = image.path ?? "nothing";
+    print( "You selected camera image : " + path);
   }
 
   AppScaffold({Key key}) : super(key: key);
@@ -62,7 +64,7 @@ class AppScaffold extends StatelessWidget {
                           locator<NavigationService>().navigateTo(HomeRoute)),
                   IconButton(
                     icon: Icon(Icons.favorite),
-                    onPressed: () {},
+                    onPressed: () => locator<NavigationService>().navigateTo(FavoriteRoute),
                   ),
                 ],
               ),

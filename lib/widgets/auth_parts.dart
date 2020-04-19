@@ -131,41 +131,50 @@ class _UserTextField extends State<UserTextField> {
 
 class LoggedIn extends StatelessWidget {
   FirebaseUser user;
-  LoggedIn(this.user);
+  Function() callback;
+  LoggedIn(this.user, this.callback);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 300,
-      child: Card(
-        elevation: 6,
-        color: Colors.white.withOpacity(0.4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-        child: Column(
-          children: <Widget>[
-            Text('Welcome, ${user.email}'),
-            Container(
-              width: 120.0,
-              child: RaisedButton(
-                color: HexColor.fromHex('9965F4'),
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                onPressed: () => AuthService().signOut(),
-                child: Text(
-                  'Sign Out'.toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    letterSpacing: 1.25,
+    return Center(
+      child: Wrap(children: <Widget>[
+        Container(
+          width: 300,
+          height: 300,
+          child: Card(
+            elevation: 6,
+            color: Colors.white.withOpacity(0.4),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Welcome, ${user.email}'),
+                Container(
+                  child: RaisedButton(
+                    color: HexColor.fromHex('9965F4'),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      AuthService().signOut();
+                      callback();
+                    },
+                    child: Text(
+                      'Sign Out'.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        letterSpacing: 1.25,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+                )
+              ],
+            ),
+          ),
+        )
+      ]),
     );
   }
 }

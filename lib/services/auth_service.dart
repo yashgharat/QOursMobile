@@ -9,14 +9,7 @@ class AuthService {
   static bool isLoggedIn = false;
 
   handleAuth() {
-    if (_currentUser != null && _currentUser.email != '') {
-      //logged in
-      isLoggedIn = true;      
-    } else {
-      //needs to be authenticated
-      isLoggedIn = false;
-      
-    }
+
   }
 
   signOut() => FirebaseAuth.instance.signOut();
@@ -36,4 +29,6 @@ class AuthService {
     if (!_currentUser.isEmailVerified)
       await _currentUser.sendEmailVerification();
   }
+  
+  get user => _currentUser;
 }

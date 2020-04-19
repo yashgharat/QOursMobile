@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,30 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   bool isAccount;
 
   GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
+  FirebaseUser user;
 
-  authenticate(String email, String password) {
+  authenticate(String email, String password) async {
     if (isAccount) {
-      AuthService().signIn(email, password);
+      await AuthService().signIn(email, password);
+      FirebaseAuth.instance.onAuthStateChanged.listen((user) {
+        if (user != null)
+          this.setState(() {
+            this.user = user;
+            AuthService.isLoggedIn = true;
+          });
+        else {
+          this.setState(() {
+            AuthService.isLoggedIn = false;
+          });
+        }
+      });
     } else {
       AuthService().register(email, password);
     }
+  }
+
+  switchType() {
+    cardKey.currentState.toggleCard();
   }
 
   _AuthenticationScreenState() {
@@ -32,12 +50,14 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     link = 'Sign up';
   }
 
-  switchType() {
-    cardKey.currentState.toggleCard();
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    changeBack() => this.setState(() => AuthService.isLoggedIn = false);
     RichText loginText = RichText(
         text: TextSpan(children: <TextSpan>[
       TextSpan(
@@ -59,14 +79,18 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           recognizer: TapGestureRecognizer()..onTap = switchType)
     ]));
     return Container(
-        child: FlipCard(
-      key: cardKey,
-      flipOnTouch: false,
-      onFlipDone: (status) => isAccount = status,
-      direction: FlipDirection.HORIZONTAL,
-      speed: 1000,
-      front: Center(child: LoginField('Login', loginText, authenticate)),
-      back: Center(child: LoginField('Register', registerText, authenticate)),
-    ));
+        child: AuthService.isLoggedIn
+            ? LoggedIn(AuthService().user, changeBack)
+            : FlipCard(
+                key: cardKey,
+                flipOnTouch: false,
+                onFlipDone: (status) => isAccount = status,
+                direction: FlipDirection.HORIZONTAL,
+                speed: 1000,
+                front:
+                    Center(child: LoginField('Login', loginText, authenticate)),
+                back: Center(
+                    child: LoginField('Register', registerText, authenticate)),
+              ));
   }
 }
