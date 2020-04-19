@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "343770451107",
+    "firebase_url": "https://poos-qours.firebaseio.com",
+    "project_id": "poos-qours",
+    "storage_bucket": "poos-qours.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343770451107:android:20f5c984add515153b4316",
+        "android_client_info": {
+          "package_name": "com.example.q_ours_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "343770451107-do1kg339d3eiq4o39t6c93hk0hgfmebq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Bs2cRQUdx5me23ygU2j1OcWdmbPzH4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "343770451107-do1kg339d3eiq4o39t6c93hk0hgfmebq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
