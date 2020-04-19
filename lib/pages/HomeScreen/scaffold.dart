@@ -9,8 +9,16 @@ import 'package:q_ours_mobile/pages/HomeScreen/home_screen.dart';
 import 'package:q_ours_mobile/extensions/hex_color.dart';
 import 'package:q_ours_mobile/services/navigation_service.dart';
 
-class AppScaffold extends StatelessWidget {
+class AppScaffold extends StatefulWidget {
+  AppScaffold({Key key}) : super(key: key);
+
+  @override
+  _AppScaffoldState createState() => _AppScaffoldState();
+}
+
+class _AppScaffoldState extends State<AppScaffold> {
   File image;
+  int index = 0;
 
   imageSelectorCamera() async {
     image = await ImagePicker.pickImage(
@@ -20,10 +28,9 @@ class AppScaffold extends StatelessWidget {
     );
 
     String path = image.path ?? "nothing";
-    print( "You selected camera image : " + path);
+    print("You selected camera image : " + path);
   }
 
-  AppScaffold({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,19 +59,33 @@ class AppScaffold extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.person),
-                onPressed: () =>
-                    locator<NavigationService>().navigateTo(AuthRoute),
+                icon: Icon(Icons.person,
+                        color: index == 1 ? Colors.red : Colors.black,),
+                onPressed: () {
+                  setState(() => index = 1);
+                  locator<NavigationService>().navigateTo(AuthRoute);
+                },
               ),
               Row(
                 children: <Widget>[
                   IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () =>
-                          locator<NavigationService>().navigateTo(HomeRoute)),
+                      icon: Icon(
+                        Icons.add,
+                        color: index == 0 ? Colors.red : Colors.black,
+                      ),
+                      onPressed: () {
+                        setState(() => index = 0);
+                        locator<NavigationService>().navigateTo(HomeRoute);
+                      }),
                   IconButton(
-                    icon: Icon(Icons.favorite),
-                    onPressed: () => locator<NavigationService>().navigateTo(FavoriteRoute),
+                    icon: Icon(
+                      Icons.collections,
+                      color: index == 2 ? Colors.red : Colors.black,
+                    ),
+                    onPressed: () {
+                      setState(() => index = 2);
+                      locator<NavigationService>().navigateTo(CodeRoute);
+                    },
                   ),
                 ],
               ),

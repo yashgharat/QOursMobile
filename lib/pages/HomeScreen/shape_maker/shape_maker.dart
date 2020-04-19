@@ -3,25 +3,25 @@ import 'package:q_ours_mobile/pages/HomeScreen/shape_maker/shape.dart';
 import 'package:q_ours_mobile/pages/HomeScreen/shape_maker/shape_gallery.dart';
 import 'package:q_ours_mobile/pages/HomeScreen/shape_maker/shape_grid.dart';
 
-
 class ShapeMaker extends StatefulWidget {
+  static List<Shape> currentShapes = [];
+
   @override
   _ShapeMakerState createState() => _ShapeMakerState();
 }
 
 class _ShapeMakerState extends State<ShapeMaker> {
-  List<Shape> currentShapes = [];
-
-  addShape(String shapeName) {
+  addShape(String shapeName, int shapeEdges) {
     setState(() {
-        currentShapes.add(Shape(shapeName));
+      if (ShapeMaker.currentShapes.length < 16)
+        ShapeMaker.currentShapes.add(Shape(shapeName, shapeEdges));
     });
   }
 
-  deleteShape() {
+  deleteShape(bool flag) {
     setState(() {
-      if(currentShapes.length > 0)
-      currentShapes.removeLast();
+      if (ShapeMaker.currentShapes.length > 0)
+        (!flag) ? ShapeMaker.currentShapes.removeLast() : ShapeMaker.currentShapes.clear();
     });
   }
 
@@ -29,7 +29,7 @@ class _ShapeMakerState extends State<ShapeMaker> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        ShapeGrid(currentShapes),
+        ShapeGrid(ShapeMaker.currentShapes),
         ShapeGallery(addShape, deleteShape),
       ],
     );

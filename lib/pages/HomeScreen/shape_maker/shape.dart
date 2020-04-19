@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class Shape extends StatelessWidget {
   String shapeName;
+  int numEdges;
 
-  Shape(this.shapeName);
+  Shape(this.shapeName, this.numEdges);
 
   @override
   Widget build(BuildContext context) {
