@@ -6,11 +6,13 @@ import 'package:q_ours_mobile/pages/HomeScreen/shape_maker/shape_grid.dart';
 class ShapeMaker extends StatefulWidget {
   static List<Shape> currentShapes = [];
 
+  ShapeMaker({Key key}) : super(key: key);
+
   @override
-  _ShapeMakerState createState() => _ShapeMakerState();
+  ShapeMakerState createState() => ShapeMakerState();
 }
 
-class _ShapeMakerState extends State<ShapeMaker> {
+class ShapeMakerState extends State<ShapeMaker> {
   addShape(String shapeName, int shapeEdges) {
     setState(() {
       if (ShapeMaker.currentShapes.length < 16)

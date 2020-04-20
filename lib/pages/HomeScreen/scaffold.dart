@@ -34,6 +34,7 @@ class _AppScaffoldState extends State<AppScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         extendBodyBehindAppBar: true,
         extendBody: true,
         appBar: AppBar(
