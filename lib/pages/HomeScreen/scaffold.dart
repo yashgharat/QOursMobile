@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:q_ours_mobile/routing/locator.dart';
 import 'package:q_ours_mobile/routing/router.dart';
 import 'package:q_ours_mobile/pages/Authentication/authentication_screen.dart';
@@ -14,6 +15,8 @@ import 'package:q_ours_mobile/services/navigation_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+
+ProgressDialog pr;
 
 class AppScaffold extends StatefulWidget {
   AppScaffold({Key key}) : super(key: key);
@@ -35,7 +38,26 @@ class _AppScaffoldState extends State<AppScaffold> {
 
     String path = image.path ?? "nothing";
     print("You selected camera image : " + path);
-    _uploadFile(image, '${uuid.v4()}');
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+
+    pr.style(
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progressTextStyle: TextStyle(
+            color: Colors.deepPurpleAccent, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+
+    pr.show();
+
+    await _uploadFile(image, '${uuid.v4()}');
   }
 
   Future<void> _uploadFile(File file, String fileName) async {
@@ -70,17 +92,20 @@ class _AppScaffoldState extends State<AppScaffold> {
 
     if (response.body.isNotEmpty) {
       String contentLink = jsonDecode(response.body)['url'];
-      _launchInWebViewOrVC(contentLink);
+      _launchInBrowser(contentLink);
     } else
-      print('nonexistent code');
+      Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("We could not locate your code"),
+    ));
   }
 
-   Future<void> _launchInWebViewOrVC(String url) async {
+  Future<void> _launchInBrowser(String url) async {
+    await pr.hide();
     if (await canLaunch(url)) {
       await launch(
         url,
-        forceSafariVC: true,
-        forceWebView: true,
+        forceSafariVC: false,
+        forceWebView: false,
         headers: <String, String>{'my_header_key': 'my_header_value'},
       );
     } else {
