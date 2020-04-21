@@ -29,6 +29,10 @@ class AuthService {
     if (!_currentUser.isEmailVerified)
       await _currentUser.sendEmailVerification();
   }
+
+  signInAnon() async {
+        await FirebaseAuth.instance.signInAnonymously();
+  }
   
   get user => _currentUser;
 }
